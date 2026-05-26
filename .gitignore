@@ -39,6 +39,7 @@ frontend/.pnpm-debug.log*
 *.env
 
 # ==================== IDE ====================
+.claude/
 .idea/
 *.iml
 *.ipr
