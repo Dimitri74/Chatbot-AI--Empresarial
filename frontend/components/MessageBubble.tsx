@@ -44,7 +44,16 @@ export default function MessageBubble({ message }: Props) {
             <p className="whitespace-pre-wrap">{message.content}</p>
           ) : (
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                urlTransform={(url) => {
+                  const lower = url.toLowerCase().trim()
+                  if (lower.startsWith('javascript:') || lower.startsWith('data:') || lower.startsWith('vbscript:')) {
+                    return ''
+                  }
+                  return url
+                }}
+              >
                 {message.content}
               </ReactMarkdown>
             </div>

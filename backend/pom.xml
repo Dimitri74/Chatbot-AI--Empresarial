@@ -90,23 +90,12 @@
             <artifactId>quarkus-langchain4j-pgvector</artifactId>
         </dependency>
 
-        <!-- LangChain4j - Easy RAG (document ingestor) -->
-        <dependency>
-            <groupId>io.quarkiverse.langchain4j</groupId>
-            <artifactId>quarkus-langchain4j-easy-rag</artifactId>
-        </dependency>
-
         <!-- LangChain4j - Document parsers -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-document-parser-apache-pdfbox</artifactId>
         </dependency>
 
-        <!-- File upload -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-multipart</artifactId>
-        </dependency>
 
         <!-- Validation -->
         <dependency>

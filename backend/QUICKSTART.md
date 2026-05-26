@@ -51,6 +51,7 @@ export POSTGRES_PASSWORD=aether123
 export OLLAMA_BASE_URL=http://localhost:11434
 export OLLAMA_CHAT_MODEL=llama3.2
 export OLLAMA_EMBEDDING_MODEL=nomic-embed-text
+export DOCUMENTS_PATH=../documents
 ```
 
 Para usar o **Groq** como fallback (sem GPU):

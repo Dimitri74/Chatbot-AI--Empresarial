@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import java.util.Map;
+
 @Path("/api/chat")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,7 +25,17 @@ public class ChatController {
     @POST
     @Operation(summary = "Envia uma mensagem para o assistente")
     public Response chat(@Valid ChatRequest request) {
-        ChatResponse response = chatService.chat(request.message, request.sessionId);
-        return Response.ok(response).build();
+        try {
+            ChatResponse response = chatService.chat(request.message, request.sessionId);
+            return Response.ok(response).build();
+        } catch (SecurityException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("error", e.getMessage()))
+                    .build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("error", e.getMessage()))
+                    .build();
+        }
     }
 }
