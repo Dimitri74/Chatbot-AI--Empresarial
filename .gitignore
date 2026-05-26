@@ -1,0 +1,65 @@
+# ==================== JAVA / MAVEN ====================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+.mvn/wrapper/maven-wrapper.jar
+
+# ==================== QUARKUS ====================
+backend/.quarkus/
+backend/target/
+backend/.gradle/
+
+# ==================== NODE / NEXT.JS ====================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
+
+# ==================== ENVIRONMENT ====================
+.env
+.env.local
+.env.*.local
+*.env
+
+# ==================== IDE ====================
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# ==================== DOCKER ====================
+docker-compose.override.yml
+
+# ==================== LOGS ====================
+*.log
+logs/
+
+# ==================== DOCUMENTS (não versionar PDFs grandes) ====================
+documents/*.pdf
+documents/*.docx
+!documents/.gitkeep
