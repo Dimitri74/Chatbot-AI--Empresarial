@@ -20,6 +20,27 @@ export interface ChatResponse {
   timestamp: string
 }
 
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+  ) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
+async function handleErrorResponse(res: Response, fallback: string): Promise<never> {
+  let message = fallback
+  try {
+    const body = await res.json()
+    if (typeof body?.error === 'string') message = body.error
+  } catch {
+    // body nao e JSON — usa fallback
+  }
+  throw new ApiError(res.status, message)
+}
+
 export async function sendMessage(
   message: string,
   sessionId?: string
@@ -31,7 +52,7 @@ export async function sendMessage(
   })
 
   if (!res.ok) {
-    throw new Error(`Erro na API: ${res.status}`)
+    await handleErrorResponse(res, `Erro na API: ${res.status}`)
   }
 
   return res.json()
@@ -47,7 +68,7 @@ export async function uploadDocument(file: File): Promise<{ fileName: string; ch
   })
 
   if (!res.ok) {
-    throw new Error(`Erro no upload: ${res.status}`)
+    await handleErrorResponse(res, `Erro no upload: ${res.status}`)
   }
 
   return res.json()

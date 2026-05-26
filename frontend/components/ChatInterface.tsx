@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { sendMessage, uploadDocument, ChatMessage } from '@/lib/api'
+import { sendMessage, uploadDocument, ChatMessage, ApiError } from '@/lib/api'
 import MessageBubble from './MessageBubble'
 import UploadButton from './UploadButton'
 import { Send, Bot } from 'lucide-react'
@@ -41,11 +41,9 @@ export default function ChatInterface() {
         timestamp: response.timestamp,
       }
       setMessages(prev => [...prev, assistantMsg])
-    } catch {
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: 'Erro ao conectar com o servidor. Verifique se o backend esta rodando.' },
-      ])
+    } catch (err) {
+      const content = resolveErrorMessage(err)
+      setMessages(prev => [...prev, { role: 'assistant', content }])
     } finally {
       setIsLoading(false)
     }
@@ -61,12 +59,21 @@ export default function ChatInterface() {
           content: `Documento **${result.fileName}** indexado com sucesso! (${result.chunks} chunks processados)`,
         },
       ])
-    } catch {
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: 'Erro ao fazer upload do documento.' },
-      ])
+    } catch (err) {
+      const content = err instanceof ApiError && err.status === 400
+        ? `Nao foi possivel processar o arquivo: ${err.message}`
+        : 'Erro ao fazer upload do documento. Verifique o formato e o tamanho (max 10 MB).'
+      setMessages(prev => [...prev, { role: 'assistant', content }])
     }
+  }
+
+  function resolveErrorMessage(err: unknown): string {
+    if (err instanceof ApiError) {
+      if (err.status === 400) return 'Sua mensagem nao pôde ser processada. Por favor, reformule e tente novamente.'
+      if (err.status === 429) return 'Muitas mensagens em pouco tempo. Aguarde um momento antes de tentar novamente.'
+      if (err.status >= 500) return 'O servidor encontrou um problema. Tente novamente em instantes.'
+    }
+    return 'Erro ao conectar com o servidor. Verifique se o backend esta rodando.'
   }
 
   return (
